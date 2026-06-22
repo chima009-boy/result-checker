@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St. Augustine's Result System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e466e;
+            --primary-dark: #0f2c44;
+            --gold: #b8860b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px -12px rgba(0,0,0,0.25);
+            --radius: 16px;
+            --radius-full: 9999px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            min-height: 100vh;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-2xl);
+            overflow: hidden;
+            animation: fadeSlideIn 0.5s ease;
+        }
+
+        .card-sm {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .school-header {
+            background: linear-gradient(135deg, var(--gold) 0%, #a67c00 100%);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .school-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .school-name {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .school-sub {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: var(--white);
+            font-family: inherit;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.1);
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.2);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(30, 70, 110, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 70, 110, 0.4);
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
+        }
+
+        .btn-gold:hover {
+            background: #a67c00;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.4);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+        }
+
+        .btn-lg {
+            padding: 16px 36px;
+            font-size: 1.1rem;
+        }
+
+        .btn-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+            animation: fadeSlideIn 0.3s ease;
+        }
+
+        .message-error {
+            background: #fee2e2;
+            color: #dc2626;
+            border-left: 4px solid #dc2626;
+        }
+
+        .message-success {
+            background: #dcfce7;
+            color: #16a34a;
+            border-left: 4px solid #16a34a;
+        }
+
+        .message-info {
+            background: #dbeafe;
+            color: #2563eb;
+            border-left: 4px solid #2563eb;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            background: rgba(0,0,0,0.3);
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            backdrop-filter: blur(10px);
+            pointer-events: none;
+            z-index: 9999;
+            font-weight: 500;
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .auth-links a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Landing page specific */
+        .hero-section {
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .trial-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            border: 2px solid #f59e0b;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trial-box::before {
+            content: '🔍';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 5rem;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
+        .trial-box h3 {
+            color: #78350f;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .trial-box p {
+            color: #92400e;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .trial-box .highlight {
+            background: #78350f;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .feature-item {
+            background: var(--gray-50);
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold);
+        }
+
+        .feature-item .icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+
+        /* Dashboard specific */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 1rem 1.5rem;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+            gap: 12px;
+        }
+
+        .user-info {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-trial {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-premium {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-admin {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #b45309;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .student-info {
+            background: var(--gray-50);
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+        }
+
+        .info-item {
+            background: var(--white);
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-item label {
+            font-weight: 700;
+            color: var(--gray-600);
+        }
+
+        .info-item input {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-full);
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            width: auto;
+            min-width: 130px;
+            background: transparent;
+        }
+
+        .info-item input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 750px;
+        }
+
+        .report-table thead {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .report-table th {
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .report-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .report-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .subject-name {
+            font-weight: 700;
+            background: #fef7e0 !important;
+            text-align: left;
+            padding-left: 16px;
+        }
+
+        .score-input {
+            width: 68px;
+            padding: 6px 4px;
+            text-align: center;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: var(--white);
+        }
+
+        .score-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.15);
+            transform: scale(1.02);
+        }
+
+        .score-input:disabled {
+            background: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .grade-cell {
+            font-weight: 800;
+            background: #f1f9fe;
+        }
+
+        .total-row td {
+            background: var(--gray-100);
+            font-weight: 800;
+            border-top: 2px solid var(--primary);
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 1rem;
+        }
+
+        .summary-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.2rem 1.5rem;
+            border-left: 5px solid var(--gold);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .summary-card h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+        }
+
+        .summary-card .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .grading-key {
+            background: #fef9e6;
+            margin: 0 1rem 1rem 1rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            border: 1px solid #fde68a;
+        }
+
+        .grading-key span {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            background: var(--white);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin: 1rem;
+            flex-wrap: wrap;
+            padding-bottom: 1rem;
+        }
+
+        /* Admin panel */
+        .admin-panel {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            margin: 1rem;
+            border-radius: var(--radius);
+            border: 2px solid var(--gold);
+        }
+
+        .admin-panel h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .admin-grid input,
+        .admin-grid select {
+            padding: 10px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+        }
+
+        .admin-grid input:focus,
+        .admin-grid select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .user-list {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+        }
+
+        .user-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--white);
+        }
+
+        .user-row:hover {
+            background: var(--gray-50);
+        }
+
+        .user-row:last-child {
+            border-bottom: none;
+        }
+
+        .user-info-text {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .trial-info {
+            background: #dbeafe;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #2563eb;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .testimonial {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--gold);
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .upgrade-prompt {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 1rem 1.5rem;
+            margin: 0 1rem 1rem 1rem;
+            border-radius: var(--radius);
+            text-align: center;
+            border: 2px solid #f59e0b;
+        }
+
+        .upgrade-prompt h3 {
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        .upgrade-prompt p {
+            color: #92400e;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-body { padding: 1.5rem; }
+            .student-info { flex-direction: column; gap: 10px; }
+            .info-item { width: 100%; }
+            .info-item input { width: 100%; }
+            .summary-cards { grid-template-columns: 1fr 1fr; }
+            .admin-grid { grid-template-columns: 1fr; }
+            .dashboard-header { flex-direction: column; align-items: stretch; gap: 10px; }
+            .action-buttons { justify-content: center; }
+            .btn { padding: 10px 20px; font-size: 0.85rem; }
+            .school-name { font-size: 1.3rem; }
+        }
+
+        @media (max-width: 480px) {
+            .summary-cards { grid-template-columns: 1fr; }
+            .score-input { width: 50px; font-size: 0.75rem; padding: 4px 2px; }
+            .report-table { font-size: 0.75rem; min-width: 600px; }
+            .feature-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card" id="app">
+        <!-- Content will be rendered by JavaScript -->
+    </div>
+</div>
+
+<div class="watermark">🔨 Created by UBAZUONU CHIMA | St. JUSTIN's Result System</div>
+
+<script>
+    // ============================================
+    // CONFIGURATION - EDIT THESE!
+    // ============================================
+    const CONFIG = {
+        APP_NAME: "St. JUSTIN's Result System",
+        CREATOR: "UBAZUNOU CHIMA",
+        CONTACT: "09019636420",
+        ADMIN_USERNAME: "admin",
+        ADMIN_PASSWORD: "admin246"  // ← CHANGE THIS!
+    };
+
+    // ============================================
+    // SUBJECTS DATA
+    // ============================================
+    const SUBJECTS = [
+        { name: "Basic Sc./Livestock", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "Biology", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "C.R.S", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "Chemistry", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "Citizenship & Heritage", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "Digital Technology", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "Economics", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "English Language", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "Mathematics", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 },
+        { name: "Physics", maxHalf: 20, maxUnated: 10, maxStd: 10, maxExam: 60 }
+    ];
+
+    // ============================================
+    // DEFAULT USERS - ONLY ADMIN EXISTS
+    // ============================================
+    const DEFAULT_USERS = {
+        [CONFIG.ADMIN_USERNAME]: {
+            password: CONFIG.ADMIN_PASSWORD,
+            role: "admin",
+            expiryDate: "2099-12-31",
+            isPremium: true,
+            fullName: "System Administrator"
+        }
+    };
+
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+    function getGrade(score) {
+        if (score >= 90) return { letter: "A+", label: "Excellent" };
+        if (score >= 75) return { letter: "A", label: "Very Good" };
+        if (score >= 65) return { letter: "B+", label: "Good" };
+        if (score >= 60) return { letter: "B", label: "Above Average" };
+        if (score >= 55) return { letter: "C+", label: "Average" };
+        if (score >= 50) return { letter: "C", label: "Below Average" };
+        if (score >= 45) return { letter: "D+", label: "Poor" };
+        if (score >= 40) return { letter: "D", label: "Very Poor" };
+        return { letter: "F", label: "Fail" };
+    }
+
+    function getPerformanceStatus(avg) {
+        if (avg >= 75) return "🌟 EXCELLENT - Outstanding performance!";
+        if (avg >= 65) return "👍 GOOD - Well done, keep it up!";
+        if (avg >= 50) return "📘 SATISFACTORY - Room for improvement";
+        if (avg >= 40) return "⚠️ NEEDS IMPROVEMENT - Work harder!";
+        return "❌ CRITICAL - Urgent attention needed!";
+    }
+
+    function getTodayDate() {
+        return new Date().toISOString().split('T')[0];
+    }
+
+    // ============================================
+    // USER MANAGEMENT (LocalStorage - Shared by all devices)
+    // ============================================
+    function loadUsers() {
+        const saved = localStorage.getItem("resultSystem_users");
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                // Always ensure admin exists
+                if (!parsed[CONFIG.ADMIN_USERNAME]) {
+                    parsed[CONFIG.ADMIN_USERNAME] = {
+                        password: CONFIG.ADMIN_PASSWORD,
+                        role: "admin",
+                        expiryDate: "2099-12-31",
+                        isPremium: true,
+                        fullName: "System Administrator"
+                    };
+                    saveUsers(parsed);
+                }
+                return parsed;
+            } catch(e) {}
+        }
+        return JSON.parse(JSON.stringify(DEFAULT_USERS));
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem("resultSystem_users", JSON.stringify(users));
+    }
+
+    function addUser(users, username, password, role = "user", expiryDate = "2027-12-31", isPremium = true) {
+        if (users[username]) return { success: false, message: "Username already exists!" };
+        if (!username || !password) return { success: false, message: "Username and password required!" };
+        if (username === CONFIG.ADMIN_USERNAME) return { success: false, message: "Cannot use admin username!" };
+        
+        users[username] = {
+            password: password,
+            role: role,
+            expiryDate: expiryDate,
+            isPremium: isPremium,
+            fullName: username
+        };
+        saveUsers(users);
+        return { success: true, message: `User "${username}" created successfully!` };
+    }
+
+    function deleteUser(users, username) {
+        if (username === CONFIG.ADMIN_USERNAME) return { success: false, message: "Cannot delete admin account!" };
+        if (!users[username]) return { success: false, message: "User not found!" };
+        delete users[username];
+        saveUsers(users);
+        return { success: true, message: `User "${username}" deleted!` };
+    }
+
+    function upgradeUser(users, username) {
+        if (!users[username]) return { success: false, message: "User not found!" };
+        if (username === CONFIG.ADMIN_USERNAME) return { success: false, message: "Admin is already premium!" };
+        
+        users[username].isPremium = true;
+        users[username].expiryDate = "2027-12-31";
+        saveUsers(users);
+        return { success: true, message: `User "${username}" upgraded to Premium!` };
+    }
+
+    function validateUser(users, username, password) {
+        const user = users[username];
+        if (!user) return { success: false, message: "User not found! Please contact admin." };
+        if (user.password !== password) return { success: false, message: "Invalid password!" };
+        
+        const today = getTodayDate();
+        if (user.expiryDate && user.expiryDate < today) {
+            return { success: false, message: "Your access has expired! Please contact the administrator to renew." };
+        }
+        
+        return { success: true, user: user };
+    }
+
+    // ============================================
+    // SESSION MANAGEMENT
+    // ============================================
+    function createSession(username, user) {
+        const session = {
+            username: username,
+            role: user.role,
+            isPremium: user.isPremium || false,
+            expiryDate: user.expiryDate,
+            fullName: user.fullName || username,
+            loggedIn: true,
+            loginTime: new Date().toISOString()
+        };
+        localStorage.setItem("resultSystem_session", JSON.stringify(session));
+        return session;
+    }
+
+    function getSession() {
+        const saved = localStorage.getItem("resultSystem_session");
+        if (saved) {
+            try {
+                const session = JSON.parse(saved);
+                if (session.loggedIn) return session;
+            } catch(e) {}
+        }
+        return null;
+    }
+
+    function destroySession() {
+        localStorage.removeItem("resultSystem_session");
+    }
+
+    function isAdmin() {
+        const session = getSession();
+        return session && session.role === "admin";
+    }
+
+    function isLoggedIn() {
+        const session = getSession();
+        return session && session.loggedIn === true;
+    }
+
+    function isPremium() {
+        const session = getSession();
+        return session && session.isPremium === true;
+    }
+
+    // ============================================
+    // SCORES MANAGEMENT
+    // ============================================
+    function saveScores(scores) {
+        localStorage.setItem("resultSystem_scores", JSON.stringify(scores));
+    }
+
+    function loadScores() {
+        const saved = localStorage.getItem("resultSystem_scores");
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch(e) {}
+        }
+        return SUBJECTS.map(() => ({ half: 0, unated: 0, std: 0, exam: 0 }));
+    }
+
+    // ============================================
+    // APP ROUTER
+    // ============================================
+    let currentPage = 'landing';
+
+    function navigateTo(page) {
+        currentPage = page;
+        renderApp();
+    }
+
+    // ============================================
+    // RENDER FUNCTIONS
+    // ============================================
+    function renderApp() {
+        const app = document.getElementById('app');
+        
+        const session = getSession();
+        if (session && session.loggedIn) {
+            if (session.role === 'admin' && currentPage === 'admin') {
+                renderAdmin(app);
+            } else {
+                renderDashboard(app);
+            }
+            return;
+        }
+
+        switch(currentPage) {
+            case 'login':
+                renderLogin(app);
+                break;
+            case 'signup':
+                renderSignup(app);
+                break;
+            default:
+                renderLanding(app);
+        }
+    }
+
+    // ============================================
+    // LANDING PAGE
+    // ============================================
+    function renderLanding(app) {
+        app.className = 'card card-sm';
+        app.innerHTML = `
+            <div class="school-header">
+                <div class="school-name">🏫 ST. JUSTIN'S SCHOOLS, KANO</div>
+                <div class="school-sub">BALATHUGS A, Sabon Gari, Kano</div>
+            </div>
+            <div class="form-body">
+                <div class="hero-section">
+                    <div class="hero-icon">📘</div>
+                    <div class="form-title">Welcome to Result Checker</div>
+                    <div class="form-subtitle">Check your academic performance instantly</div>
+                </div>
+
+                <div class="trial-box">
+                    <h3>🔍 VIEW ONLY TRIAL</h3>
+                    <p>
+                        <span class="highlight">FREE</span> 
+                        <span style="font-weight: 600; color: #78350f;">
+                            - View how the system works!
+                        </span>
+                        <br>
+                        <strong>Pay to unlock full access!</strong>
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <span class="icon">📊</span>
+                        View Scores
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">📈</span>
+                        See Grades
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">🔒</span>
+                        Secure & Private
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">📱</span>
+                        Access Anywhere
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-full btn-lg" onclick="navigateTo('login')">
+                        🔐 Login to Your Account
+                    </button>
+                    <button class="btn btn-gold btn-full btn-lg" onclick="navigateTo('signup')">
+                        💰 Purchase Premium Access
+                    </button>
+                </div>
+
+                <div class="testimonial">
+                    "This system helped me track my results easily! 
+                    I can see my grades instantly and know where to improve." 
+                    <br><strong>— Chima, SSS 2 Student</strong>
+                </div>
+
+                <div class="auth-links" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
+                    <p style="font-size: 0.75rem; color: var(--gray-400);">
+                        🔒 Your results are secure and private
+                    </p>
+                    <p style="font-size: 0.7rem; color: var(--gray-400); margin-top: 4px;">
+                        Need help? Contact: <strong style="color: var(--gold);">${CONFIG.CONTACT}</strong>
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+
+    // ============================================
+    // LOGIN PAGE
+    // ============================================
+    function renderLogin(app) {
+        app.className = 'card card-sm';
+        app.innerHTML = `
+            <div class="school-header">
+                <div class="school-name">🔐 LOGIN</div>
+                <div class="school-sub">Enter your credentials to continue</div>
+            </div>
+            <div class="form-body">
+                <div class="form-title">Welcome Back</div>
+                <div class="form-subtitle">Enter your username and password</div>
+
+                <div class="input-group">
+                    <label>👤 Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username">
+                </div>
+
+                <div class="input-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+
+                <button class="btn btn-primary btn-full btn-lg" id="loginBtn">✅ Login</button>
+
+                <div id="loginMessage" class="message"></div>
+
+                <div class="auth-links">
+                    <p>Need an account? <a href="#" onclick="navigateTo('signup'); return false;">Purchase Premium Access</a></p>
+                    <p style="margin-top: 8px;">👑 <a href="#" onclick="navigateTo('landing'); return false;">← Back to Home</a></p>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('loginBtn').addEventListener('click', handleLogin);
+        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+        document.getElementById('loginUsername').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+    }
+
+    function handleLogin() {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        const messageDiv = document.getElementById('loginMessage');
+
+        if (!username || !password) {
+            messageDiv.textContent = '❌ Please enter username and password';
+            messageDiv.className = 'message message-error';
+            messageDiv.style.display = 'block';
+            return;
+        }
+
+        const users = loadUsers();
+        const result = validateUser(users, username, password);
+
+        if (!result.success) {
+            messageDiv.textContent = '❌ ' + result.message;
+            messageDiv.className = 'message message-error';
+            messageDiv.style.display = 'block';
+            return;
+        }
+
+        createSession(username, result.user);
+        renderApp();
+    }
+
+    // ============================================
+    // SIGNUP PAGE - PURCHASE ONLY (NO SELF-SIGNUP)
+    // ============================================
+    function renderSignup(app) {
+        app.className = 'card card-sm';
+        app.innerHTML = `
+            <div class="school-header">
+                <div class="school-name">💰 PURCHASE ACCESS</div>
+                <div class="school-sub">Get your Premium Account</div>
+            </div>
+            <div class="form-body">
+                <div class="form-title">Get Premium Access</div>
+                <div class="form-subtitle">
+                    Accounts are created by the administrator only.
+                </div>
+
+                <div style="background: #fef3c7; padding: 1.5rem; border-radius: 16px; border: 2px solid #f59e0b; margin: 1.5rem 0; text-align: center;">
+                    <h3 style="color: #78350f;">💰 Premium Access</h3>
+                    <p style="color: #92400e; margin-top: 8px; font-size: 0.95rem;">
+                        To get full access to the system:
+                    </p>
+                    <ul style="text-align: left; color: #92400e; margin: 12px 0; padding-left: 1.5rem; font-size: 0.85rem;">
+                        <li>✅ Input and calculate your scores</li>
+                        <li>✅ Track your academic progress</li>
+                        <li>✅ Get instant grades and analysis</li>
+                        <li>✅ Save your results forever</li>
+                    </ul>
+                    <p style="color: #92400e; font-size: 1.1rem; font-weight: 700;">
+                        📞 Contact: <strong style="font-size: 1.3rem;">${CONFIG.CONTACT}</strong>
+                    </p>
+                </div>
+
+                <div style="background: #dbeafe; padding: 1rem; border-radius: 12px; border-left: 4px solid #2563eb; margin-bottom: 1.5rem;">
+                    <strong>💡 How to get access:</strong>
+                    <ol style="margin-top: 8px; padding-left: 1.2rem; font-size: 0.85rem;">
+                        <li>Contact the administrator via phone</li>
+                        <li>Make payment for your access plan</li>
+                        <li>Receive your username and password</li>
+                        <li>Login and start tracking your results!</li>
+                    </ol>
+                </div>
+
+                <div class="auth-links">
+                    <p>Already have an account? <a href="#" onclick="navigateTo('login'); return false;">Login here</a></p>
+                    <p style="margin-top: 8px;">🏠 <a href="#" onclick="navigateTo('landing'); return false;">← Back to Home</a></p>
+                </div>
+            </div>
+        `;
+    }
+
+    // ============================================
+    // DASHBOARD
+    // ============================================
+    function renderDashboard(app) {
+        const session = getSession();
+        if (!session || !session.loggedIn) {
+            navigateTo('landing');
+            return;
+        }
+
+        const isPremiumUser = session.isPremium === true;
+        const isAdminUser = session.role === 'admin';
+
+        app.className = 'card';
+        app.innerHTML = `
+            <div class="school-header">
+                <div class="school-name">🏫 ST. JUSTIN'S, KANO</div>
+                <div class="school-sub">St. Rita Avenue, Sabon Gari, Kano</div>
+            </div>
+
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <span>👤 <strong>${session.username}</strong></span>
+                    ${isAdminUser ? '<span class="badge badge-admin">👑 Admin</span>' : ''}
+                    ${isPremiumUser ? '<span class="badge badge-premium">✅ Premium Access</span>' : '<span class="badge badge-trial">🔍 View Only (Trial)</span>'}
+                    ${session.expiryDate ? `<span class="badge">📅 Expires: ${session.expiryDate}</span>` : ''}
+                </div>
+                <div>
+                    ${isAdminUser ? `<button class="btn btn-outline btn-sm" id="adminBtn">🔧 Admin</button>` : ''}
+                    <button class="btn btn-outline btn-sm" id="logoutBtn">🚪 Logout</button>
+                </div>
+            </div>
+
+            ${!isPremiumUser && !isAdminUser ? `
+                <div class="upgrade-prompt">
+                    <h3>🔒 VIEW ONLY MODE</h3>
+                    <p>
+                        You can see how the system works but <strong>cannot input scores</strong>.<br>
+                        <strong>Pay to upgrade to Premium!</strong> Contact: <strong>${CONFIG.CONTACT}</strong>
+                    </p>
+                </div>
+            ` : ''}
+
+            <div class="student-info">
+                <div class="info-item">
+                    <label>Admission No:</label>
+                    <input type="text" id="admissionNo" value="SASK/STU/2024/0519" ${!isPremiumUser && !isAdminUser ? 'disabled' : ''}>
+                </div>
+                <div class="info-item">
+                    <label>Name:</label>
+                    <input type="text" id="studentName" value="${session.fullName || 'Student Name'}" ${!isPremiumUser && !isAdminUser ? 'disabled' : ''}>
+                </div>
+                <div class="info-item">
+                    <label>Class:</label>
+                    <input type="text" id="className" value="SSS 2 Veritas" ${!isPremiumUser && !isAdminUser ? 'disabled' : ''}>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>SUBJECTS</th>
+                            <th>Half (20%)</th>
+                            <th>Unated (10%)</th>
+                            <th>Std (10%)</th>
+                            <th>Exam (60%)</th>
+                            <th>Total (100%)</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                    <tfoot id="tableFooter"></tfoot>
+                </table>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h4>📊 Total Score</h4>
+                    <div class="value" id="totalScoreDisplay">0.00</div>
+                </div>
+                <div class="summary-card">
+                    <h4>📈 Term Average</h4>
+                    <div class="value" id="termAverageDisplay">0.00</div>
+                </div>
+                <div class="summary-card">
+                    <h4>🏅 Overall Grade</h4>
+                    <div class="value" id="overallGradeDisplay">-</div>
+                </div>
+                <div class="summary-card" style="border-left-color: #22c55e;">
+                    <h4>📌 Status</h4>
+                    <div class="value" id="performanceStatus" style="font-size: 1rem;">--</div>
+                </div>
+            </div>
+
+            <div class="grading-key">
+                <span><strong>A+</strong> 90-100</span>
+                <span><strong>A</strong> 75-89.99</span>
+                <span><strong>B+</strong> 65-74.99</span>
+                <span><strong>B</strong> 60-64.99</span>
+                <span><strong>C+</strong> 55-59.99</span>
+                <span><strong>C</strong> 50-54.99</span>
+                <span><strong>D+</strong> 45-49.99</span>
+                <span><strong>D</strong> 40-44.99</span>
+                <span><strong>F</strong> 0-39.99</span>
+            </div>
+
+            <div class="action-buttons">
+                ${isPremiumUser || isAdminUser ? `
+                    <button class="btn btn-success btn-action" id="addSubjectBtn">➕ Add Subject</button>
+                    <button class="btn btn-danger btn-action" id="deleteSubjectBtn">🗑 Delete Subject</button>
+                    <button class="btn btn-warning btn-action" id="resetDefaultBtn">⟳ Reset to Default</button>
+                    <button class="btn btn-danger btn-action" id="clearDataBtn">🗑 Clear My Data</button>
+                ` : `
+                    <button class="btn btn-success btn-disabled" disabled>➕ Add Subject (Premium Only)</button>
+                    <button class="btn btn-danger btn-disabled" disabled>🗑 Delete Subject (Premium Only)</button>
+                    <button class="btn btn-warning btn-disabled" disabled>⟳ Reset (Premium Only)</button>
+                    <button class="btn btn-danger btn-disabled" disabled>🗑 Clear Data (Premium Only)</button>
+                `}
+                <button class="btn btn-primary" id="printReportBtn">🖨️ Print Result</button>
+            </div>
+        `;
+
+        // Event listeners
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            destroySession();
+            navigateTo('landing');
+        });
+
+        if (document.getElementById('adminBtn')) {
+            document.getElementById('adminBtn').addEventListener('click', () => {
+                navigateTo('admin');
+            });
+        }
+
+        if (isPremiumUser || isAdminUser) {
+            if (document.getElementById('addSubjectBtn')) {
+                document.getElementById('addSubjectBtn').addEventListener('click', addNewSubject);
+            }
+            if (document.getElementById('deleteSubjectBtn')) {
+                document.getElementById('deleteSubjectBtn').addEventListener('click', deleteSubject);
+            }
+            if (document.getElementById('resetDefaultBtn')) {
+                document.getElementById('resetDefaultBtn').addEventListener('click', resetToDefault);
+            }
+            if (document.getElementById('clearDataBtn')) {
+                document.getElementById('clearDataBtn').addEventListener('click', clearMyData);
+            }
+        }
+
+        document.getElementById('printReportBtn').addEventListener('click', () => window.print());
+
+        buildTable(isPremiumUser || isAdminUser);
+    }
+
+    // ============================================
+    // TABLE FUNCTIONS
+    // ============================================
+    let savedScores = loadScores();
+
+    function buildTable(canEdit = true) {
+        const tbody = document.getElementById('tableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        SUBJECTS.forEach((sub, idx) => {
+            const row = tbody.insertRow();
+            
+            const subCell = row.insertCell(0);
+            subCell.innerHTML = `<input type="text" class="subject-input" value="${sub.name}" style="border:none;background:#fef7e0;font-weight:700;width:100%;padding:4px;font-size:0.85rem;" ${!canEdit ? 'disabled' : ''}>`;
+            subCell.classList.add('subject-name');
+
+            const halfInput = createScoreInput('half', idx, canEdit);
+            const unatedInput = createScoreInput('unated', idx, canEdit);
+            const stdInput = createScoreInput('std', idx, canEdit);
+            const examInput = createScoreInput('exam', idx, canEdit);
+
+            halfInput.value = (savedScores[idx]?.half || 0).toFixed(1);
+            unatedInput.value = (savedScores[idx]?.unated || 0).toFixed(1);
+            stdInput.value = (savedScores[idx]?.std || 0).toFixed(1);
+            examInput.value = (savedScores[idx]?.exam || 0).toFixed(1);
+
+            if (!canEdit) {
+                halfInput.disabled = true;
+                unatedInput.disabled = true;
+                stdInput.disabled = true;
+                examInput.disabled = true;
+            }
+
+            row.insertCell(1).appendChild(halfInput);
+            row.insertCell(2).appendChild(unatedInput);
+            row.insertCell(3).appendChild(stdInput);
+            row.insertCell(4).appendChild(examInput);
+
+            const totalCell = row.insertCell(5);
+            totalCell.style.fontWeight = '700';
+            totalCell.style.background = '#eef2ff';
+
+            const gradeCell = row.insertCell(6);
+            gradeCell.classList.add('grade-cell');
+
+            function updateRow() {
+                if (!canEdit) return;
+                
+                const h = clamp(parseFloat(halfInput.value) || 0, 0, 20);
+                const u = clamp(parseFloat(unatedInput.value) || 0, 0, 10);
+                const s = clamp(parseFloat(stdInput.value) || 0, 0, 10);
+                const e = clamp(parseFloat(examInput.value) || 0, 0, 60);
+
+                halfInput.value = h.toFixed(1);
+                unatedInput.value = u.toFixed(1);
+                stdInput.value = s.toFixed(1);
+                examInput.value = e.toFixed(1);
+
+                const total = h + u + s + e;
+                totalCell.innerText = total.toFixed(1);
+                const grade = getGrade(total);
+                gradeCell.innerText = grade.letter;
+
+                saveAllScores();
+                updateTotals();
+            }
+
+            if (canEdit) {
+                [halfInput, unatedInput, stdInput, examInput].forEach(inp => {
+                    inp.addEventListener('input', updateRow);
+                    inp.addEventListener('blur', updateRow);
+                });
+            }
+
+            updateRow();
+        });
+
+        updateTotals();
+    }
+
+    function createScoreInput(type, idx, canEdit = true) {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.step = '0.1';
+        input.className = 'score-input';
+        input.dataset.index = idx;
+        input.dataset.type = type;
+        input.setAttribute('min', '0');
+        if (!canEdit) {
+            input.disabled = true;
+        }
+        return input;
+    }
+
+    function clamp(val, min, max) {
+        return Math.min(max, Math.max(min, val));
+    }
+
+    function saveAllScores() {
+        const scores = [];
+        document.querySelectorAll('#tableBody tr').forEach(row => {
+            const inputs = row.querySelectorAll('.score-input');
+            if (inputs.length === 4) {
+                scores.push({
+                    half: parseFloat(inputs[0].value) || 0,
+                    unated: parseFloat(inputs[1].value) || 0,
+                    std: parseFloat(inputs[2].value) || 0,
+                    exam: parseFloat(inputs[3].value) || 0
+                });
+            }
+        });
+        saveScores(scores);
+        savedScores = scores;
+    }
+
+    function updateTotals() {
+        let totalSum = 0;
+        let count = 0;
+        document.querySelectorAll('#tableBody tr').forEach(row => {
+            const totalCell = row.cells[5];
+            if (totalCell) {
+                const val = parseFloat(totalCell.innerText);
+                if (!isNaN(val)) {
+                    totalSum += val;
+                    count++;
+                }
+            }
+        });
+
+        const avg = count ? totalSum / count : 0;
+        const grade = getGrade(avg);
+        const status = getPerformanceStatus(avg);
+
+        document.getElementById('totalScoreDisplay').innerText = totalSum.toFixed(2);
+        document.getElementById('termAverageDisplay').innerText = avg.toFixed(2);
+        document.getElementById('overallGradeDisplay').innerText = grade.letter;
+        document.getElementById('performanceStatus').innerHTML = status;
+
+        updateFooterTotals();
+    }
+
+    function updateFooterTotals() {
+        const tfoot = document.getElementById('tableFooter');
+        if (!tfoot) return;
+        tfoot.innerHTML = '';
+        
+        let sumHalf = 0, sumUnated = 0, sumStd = 0, sumExam = 0, sumTotal = 0;
+        document.querySelectorAll('#tableBody tr').forEach(row => {
+            const inputs = row.querySelectorAll('.score-input');
+            if (inputs.length === 4) {
+                sumHalf += parseFloat(inputs[0].value) || 0;
+                sumUnated += parseFloat(inputs[1].value) || 0;
+                sumStd += parseFloat(inputs[2].value) || 0;
+                sumExam += parseFloat(inputs[3].value) || 0;
+            }
+            const totalVal = parseFloat(row.cells[5]?.innerText) || 0;
+            sumTotal += totalVal;
+        });
+
+        const footerRow = tfoot.insertRow();
+        footerRow.classList.add('total-row');
+        footerRow.insertCell(0).innerHTML = '📊 <strong>TOTAL SUM</strong>';
+        footerRow.insertCell(1).innerText = sumHalf.toFixed(1);
+        footerRow.insertCell(2).innerText = sumUnated.toFixed(1);
+        footerRow.insertCell(3).innerText = sumStd.toFixed(1);
+        footerRow.insertCell(4).innerText = sumExam.toFixed(1);
+        footerRow.insertCell(5).innerHTML = `<strong>${sumTotal.toFixed(1)}</strong>`;
+        footerRow.insertCell(6).innerText = '';
+    }
+
+    // ============================================
+    // SUBJECT MANAGEMENT (Premium only)
+    // ============================================
+    function addNewSubject() {
+        if (!isPremium() && !isAdmin()) {
+            alert('❌ Premium access required to add subjects!');
+            return;
+        }
+        
+        const subjectName = prompt("📝 Enter the new subject name:", "New Subject");
+        
+        if (!subjectName || subjectName.trim() === "") return;
+        
+        if (SUBJECTS.some(sub => sub.name.toLowerCase() === subjectName.trim().toLowerCase())) {
+            alert('❌ Subject already exists!');
+            return;
+        }
+        
+        SUBJECTS.push({
+            name: subjectName.trim(),
+            maxHalf: 20,
+            maxUnated: 10,
+            maxStd: 10,
+            maxExam: 60
+        });
+        
+        savedScores.push({ half: 0, unated: 0, std: 0, exam: 0 });
+        saveScores(savedScores);
+        buildTable(isPremium() || isAdmin());
+        alert(`✅ Subject "${subjectName.trim()}" added successfully!`);
+    }
+
+    function deleteSubject() {
+        if (!isPremium() && !isAdmin()) {
+            alert('❌ Premium access required to delete subjects!');
+            return;
+        }
+        
+        if (SUBJECTS.length <= 1) {
+            alert('❌ You must have at least 1 subject!');
+            return;
+        }
+        
+        let subjectList = SUBJECTS.map((sub, idx) => `${idx + 1}. ${sub.name}`).join('\n');
+        
+        const subjectIndex = prompt(
+            `📋 Current Subjects:\n${subjectList}\n\nEnter the number of the subject to delete:`,
+            "1"
+        );
+        
+        if (!subjectIndex) return;
+        
+        const idx = parseInt(subjectIndex) - 1;
+        
+        if (isNaN(idx) || idx < 0 || idx >= SUBJECTS.length) {
+            alert('❌ Invalid subject number!');
+            return;
+        }
+        
+        const subjectName = SUBJECTS[idx].name;
+        
+        if (confirm(`⚠️ Delete subject "${subjectName}"? This will remove all scores for this subject!`)) {
+            SUBJECTS.splice(idx, 1);
+            savedScores.splice(idx, 1);
+            saveScores(savedScores);
+            buildTable(isPremium() || isAdmin());
+            alert(`✅ Subject "${subjectName}" deleted successfully!`);
+        }
+    }
+
+    function resetToDefault() {
+        if (!isPremium() && !isAdmin()) {
+            alert('❌ Premium access required to reset scores!');
+            return;
+        }
+        
+        if (confirm('Reset all scores to zero?')) {
+            const zeros = SUBJECTS.map(() => ({ half: 0, unated: 0, std: 0, exam: 0 }));
+            saveScores(zeros);
+            savedScores = zeros;
+            buildTable(isPremium() || isAdmin());
+        }
+    }
+
+    function clearMyData() {
+        if (!isPremium() && !isAdmin()) {
+            alert('❌ Premium access required to clear data!');
+            return;
+        }
+        
+        if (confirm('⚠️ WARNING: This will DELETE ALL saved scores. Are you sure?')) {
+            localStorage.removeItem('resultSystem_scores');
+            resetToDefault();
+            alert('✅ All data cleared!');
+        }
+    }
+
+    // ============================================
+    // ADMIN PANEL
+    // ============================================
+    function renderAdmin(app) {
+        const session = getSession();
+        if (!session || !session.loggedIn || session.role !== 'admin') {
+            navigateTo('dashboard');
+            return;
+        }
+
+        app.className = 'card';
+        app.innerHTML = `
+            <div class="school-header">
+                <div class="school-name">🔧 JUSTIN'S PANEL</div>
+                <div class="school-sub">Manage Users & System Settings</div>
+            </div>
+
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <span>👑 <strong>${session.username}</strong></span>
+                    <span class="badge badge-admin">Administrator</span>
+                </div>
+                <div>
+                    <button class="btn btn-outline btn-sm" id="backToDashboardBtn">📊 Dashboard</button>
+                    <button class="btn btn-danger btn-sm" id="logoutBtn">🚪 Logout</button>
+                </div>
+            </div>
+
+            <div style="padding: 1rem;">
+                <div style="background: #dbeafe; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid #2563eb;">
+                    <strong>📊 System Stats</strong>
+                    <div id="systemStats" style="margin-top: 8px; font-size: 0.9rem;"></div>
+                </div>
+
+                <div class="admin-panel">
+                    <h3>➕ Add New Premium User</h3>
+                    <div class="admin-grid">
+                        <input type="text" id="newUsername" placeholder="Username">
+                        <input type="text" id="newPassword" placeholder="Password">
+                        <input type="date" id="newExpiry" placeholder="Expiry Date">
+                        <select id="newRole">
+                            <option value="user">Regular User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success" id="addUserBtn" style="width:100%;">➕ Add Premium User</button>
+                    <div id="addUserMessage" class="message"></div>
+                </div>
+
+                <div class="admin-panel">
+                    <h3>⬆️ Upgrade User to Premium</h3>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <input type="text" id="upgradeUsername" placeholder="Username to upgrade" style="flex: 2;">
+                        <button class="btn btn-success" id="upgradeBtn" style="flex:1;">⬆️ Upgrade to Premium</button>
+                    </div>
+                    <div id="upgradeMessage" class="message"></div>
+                </div>
+
+                <div class="admin-panel">
+                    <h3>👥 All Users</h3>
+                    <div id="userList" class="user-list"></div>
+                </div>
+
+                <div style="margin-top: 1.5rem; padding: 1rem; background: #fef3c7; border-radius: 12px; border-left: 4px solid #f59e0b;">
+                    <strong>💡 Admin Tips:</strong>
+                    <ul style="margin-top: 8px; font-size: 0.85rem; padding-left: 1.2rem;">
+                        <li>⭐ <strong>Premium users</strong> have FULL ACCESS - can input scores</li>
+                        <li>💰 Create accounts for paying students</li>
+                        <li>📅 Set expiry dates to control access</li>
+                        <li>🔄 Upgrade existing users when they pay</li>
+                    </ul>                 </div>
+            </div>
+        `;
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            destroySession();
+            navigateTo('landing');
+        });
+
+        document.getElementById('backToDashboardBtn').addEventListener('click', () => {
+            navigateTo('dashboard');
+        });
+
+        document.getElementById('addUserBtn').addEventListener('click', handleAddUser);
+        document.getElementById('upgradeBtn').addEventListener('click', handleUpgrade);
+
+        refreshUserList();
+    }
+
+    function handleAddUser() {
+        const username = document.getElementById('newUsername').value.trim();
+        const password = document.getElementById('newPassword').value.trim();
+        const expiry = document.getElementById('newExpiry').value;
+        const role = document.getElementById('newRole').value;
+        const messageDiv = document.getElementById('addUserMessage');
+
+        const users = loadUsers();
+        const result = addUser(users, username, password, role, expiry || '2027-12-31', true);
+        
+        if (result.success) {
+            messageDiv.textContent = '✅ ' + result.message + ' (Premium Access)';
+            messageDiv.className = 'message message-success';
+            messageDiv.style.display = 'block';
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newPassword').value = '';
+            refreshUserList();
+        } else {
+            messageDiv.textContent = '❌ ' + result.message;
+            messageDiv.className = 'message message-error';
+            messageDiv.style.display = 'block';
+        }
+        setTimeout(() => { messageDiv.style.display = 'none'; }, 4000);
+    }
+
+    function handleUpgrade() {
+        const username = document.getElementById('upgradeUsername').value.trim();
+        const messageDiv = document.getElementById('upgradeMessage');
+
+        if (!username) {
+            messageDiv.textContent = '❌ Please enter a username to upgrade';
+            messageDiv.className = 'message message-error';
+            messageDiv.style.display = 'block';
+            setTimeout(() => { messageDiv.style.display = 'none'; }, 4000);
+            return;
+        }
+
+        const users = loadUsers();
+        const result = upgradeUser(users, username);
+        
+        if (result.success) {
+            messageDiv.textContent = '✅ ' + result.message;
+            messageDiv.className = 'message message-success';
+            messageDiv.style.display = 'block';
+            document.getElementById('upgradeUsername').value = '';
+            refreshUserList();
+        } else {
+            messageDiv.textContent = '❌ ' + result.message;
+            messageDiv.className = 'message message-error';
+            messageDiv.style.display = 'block';
+        }
+        setTimeout(() => { messageDiv.style.display = 'none'; }, 4000);
+    }
+
+    function refreshUserList() {
+        const userListDiv = document.getElementById('userList');
+        if (!userListDiv) return;
+        userListDiv.innerHTML = '';
+
+        const users = loadUsers();
+        const sortedUsers = Object.keys(users).sort();
+        
+        sortedUsers.forEach(username => {
+            const user = users[username];
+            const userRow = document.createElement('div');
+            userRow.className = 'user-row';
+            
+            const status = user.isPremium ? '⭐ Premium' : '🔍 View Only';
+            const expiryInfo = user.expiryDate ? `📅 ${user.expiryDate}` : '';
+            
+            userRow.innerHTML = `
+                <div class="user-info-text">
+                    <strong>${username}</strong>
+                    <span class="badge" style="background: ${user.role === 'admin' ? '#dbeafe' : '#e2e8f0'};">
+                        ${user.role === 'admin' ? '👑 Admin' : '👤 User'}
+                    </span>
+                    <span class="badge" style="background: ${user.isPremium ? '#dcfce7' : '#fef3c7'};">
+                        ${status}
+                    </span>
+                    ${expiryInfo ? `<span style="font-size:0.7rem;color:${user.expiryDate < getTodayDate() ? '#dc2626' : '#64748b'};">${expiryInfo}</span>` : ''}
+                </div>
+                ${username !== CONFIG.ADMIN_USERNAME ? `
+                    <div style="display: flex; gap: 6px;">
+                        ${!user.isPremium ? `<button class="btn btn-success btn-sm" onclick="upgradeUserAction('${username}')">⬆️ Upgrade</button>` : ''}
+                        <button class="btn btn-danger btn-sm" onclick="deleteUserAction('${username}')">Delete</button>
+                    </div>
+                ` : ''}
+            `;
+            userListDiv.appendChild(userRow);
+        });
+
+        // Update stats
+        const totalUsers = sortedUsers.length;
+        const totalPremium = sortedUsers.filter(u => users[u].isPremium).length;
+        const totalAdmins = sortedUsers.filter(u => users[u].role === 'admin').length;
+        const statsDiv = document.getElementById('systemStats');
+        if (statsDiv) {
+            statsDiv.innerHTML = `
+                <span>👥 Total Users: <strong>${totalUsers}</strong></span> |
+                <span>⭐ Premium: <strong>${totalPremium}</strong></span> |
+                <span>👑 Admins: <strong>${totalAdmins}</strong></span>
+            `;
+        }
+    }
+
+    window.deleteUserAction = function(username) {
+        if (confirm(`⚠️ Delete user "${username}"? This cannot be undone!`)) {
+            const users = loadUsers();
+            const result = deleteUser(users, username);
+            if (result.success) {
+                refreshUserList();
+                alert('✅ ' + result.message);
+            } else {
+                alert('❌ ' + result.message);
+            }
+        }
+    };
+
+    window.upgradeUserAction = function(username) {
+        if (confirm(`⭐ Upgrade "${username}" to Premium? They will get FULL ACCESS!`)) {
+            const users = loadUsers();
+            const result = upgradeUser(users, username);
+            if (result.success) {
+                refreshUserList();
+                alert('✅ ' + result.message);
+            } else {
+                alert('❌ ' + result.message);
+            }
+        }
+    };
+
+    // ============================================
+    // INIT - Start the app
+    // ============================================
+    renderApp();
+</script>
+</body>
+</html>
